@@ -1,0 +1,32 @@
+import discord
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+intents = discord.Intents.default()  # Define your intents
+intents.typing = False  # Disable typing updates for simplicity
+
+bot = discord.Bot(intents=intents)  # Use Bot class with intents
+
+@bot.event
+async def on_ready():
+    print(f"{bot.user} is ready and online!")
+
+@bot.slash_command(name="mm", description="Say hello to the bot")
+async def hello(ctx):
+    await ctx.respond("Hey!")
+
+@bot.slash_command(name="datesimmy", description="Dating Simulator")
+async def datesim(ctx):
+    await ctx.respond("Code is processing, asking nadhilaweb for a token...")
+
+class MyView(discord.ui.View):
+    @discord.ui.button(label="Click me!", style=discord.ButtonStyle.primary)
+    async def button_callback(self, button, interaction):
+        await interaction.response.send_message("You clicked the button!")
+
+@bot.slash_command(name="buttoned", description="Button Command")
+async def button(ctx):
+    await ctx.respond("This is a button!", view=MyView())
+
+bot.run(os.getenv('TOKEN'))
